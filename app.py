@@ -460,8 +460,9 @@ def updateOrdersStatus(user):
 def update():
     while True:
         if processingAlert == False:
+            print(">>> update")
             for user in users:
-                print("- update user " + user.email)
+                print("- update user " + user.email + " " + str(user.id))
                 updateOrdersStatus(user)
         time.sleep(60 * 3)
 
@@ -550,7 +551,7 @@ def webhook():
         
         processingAlert = True
         for user in users:
-            print("- user " + user.email)
+            print("- user " + user.email + " " + str(user.id))
             sendOrder(user, d)
         processingAlert = False
         
