@@ -555,25 +555,14 @@ def dashboard():
 def webhook():
     if request.method == 'POST':
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        # Parse the string data from tradingview into a python dict
-        # data = parse_webhook(request.get_data(as_text=True))
-        # print(data)
         d = request.get_data(as_text=True)
-        Mail.sendMail("ueuoeueo", d, "ooochris@hotmail.com")
-        print(d)
-        print(d)
-        exit(0)
+
         processingAlert = True
         for user in users:
             sendOrder(user, d)
         processingAlert = False
+        
         return '', 200
-        # Check that the key is correct
-        # if get_token() == data['key']:
-        # send_order(data)
-        # return '', 200
-        # else:
-        # abort(403)
     else:
         abort(400)
 
