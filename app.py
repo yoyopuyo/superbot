@@ -27,6 +27,8 @@ def loadConfig():
     config = FileUtils.loadJsonFromFile(configFileName)
 
 def loadUsers():
+    global users
+    users = {}
     for i in range(1, 3):
         mail = os.getenv(str(i) + "-mail")
         if mail is not None:
@@ -526,8 +528,8 @@ for user in users:
 # sendOrder(users[0], 'DefenseSellLot4, KUCOIN:CIRUSUSDT, 999999, 3')
 
 
-#t = threading.Thread(target=update)
-#t.start()
+t = threading.Thread(target=update)
+t.start()
 
 
 @app.route("/")
