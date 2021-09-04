@@ -28,7 +28,7 @@ def loadConfig():
 
 def loadUsers():
     global users
-    users = {}
+    users = []
     for i in range(1, 3):
         mail = os.getenv(str(i) + "-mail")
         if mail is not None:
