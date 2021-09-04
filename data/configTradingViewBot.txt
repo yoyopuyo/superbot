@@ -53,18 +53,5 @@
 		"*/BNB" : {
 			"amount" : 0.1
 		}
-	},
-	"users": [{
-		"id" : "1",
-		"email" : "your email so you can receive the trade emails",
-		"exchangesDef" : [
-			{
-				"id" : "kucoin",				
-				"key" : "blablabla",
-				"secret" : "blablabla",
-				"password" : "blablabla"
-			}
-		]			
 	}
-	]
 }
