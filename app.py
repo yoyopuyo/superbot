@@ -556,7 +556,10 @@ def webhook():
     if request.method == 'POST':
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         d = request.get_data(as_text=True)
-
+        if d == "test":
+            print("hello")
+            return '', 200
+        
         processingAlert = True
         for user in users:
             sendOrder(user, d)
