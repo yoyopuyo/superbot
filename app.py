@@ -33,18 +33,15 @@ config = {}
 users = []
 ordersData = []
 
-
 def getSymbolRightPart(symbol):
     if '/' in symbol:
         return symbol.split('/')[1]
 
     return None
 
-
 def loadConfig():
     global config
     config = FileUtils.loadJsonFromFile(configFileName)
-
 
 def loadUsers():
     for i in range(1, 3):
@@ -480,7 +477,7 @@ def update():
             if 'cancelBuyAfterMinutes' in config['options']:
                 for user in users:
                     updateOrdersStatus(user)
-        time.sleep(60)
+        time.sleep(60 * 3)
 
 
 def deleteBuyOrdersFromDb(user, exchangeId, tickerId, timeFrame, strategyId):
@@ -542,8 +539,10 @@ for user in users:
 # sendOrder(users[0], 'DefenseSellLot4, CAPITALCOM:DE30, 152.4,1')
 # sendOrder(users[0], 'Buy, KUCOIN:HAIUSDT, 999999')
 # sendOrder(users[0], 'DefenseSellLot4, KUCOIN:CIRUSUSDT, 999999, 3')
-#t = threading.Thread(target=update)
-#t.start()
+
+
+t = threading.Thread(target=update)
+t.start()
 
 
 @app.route("/")
