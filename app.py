@@ -474,9 +474,9 @@ def updateOrdersStatus(user):
 def update():
     while True:
         if processingAlert == False:
-            if 'cancelBuyAfterMinutes' in config['options']:
-                for user in users:
-                    updateOrdersStatus(user)
+            for user in users:
+                print("- update user " + user.emai)
+                updateOrdersStatus(user)
         time.sleep(60 * 3)
 
 
@@ -562,6 +562,7 @@ def webhook():
         
         processingAlert = True
         for user in users:
+            print("- user " + user.emai)
             sendOrder(user, d)
         processingAlert = False
         
