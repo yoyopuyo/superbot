@@ -228,7 +228,7 @@ class TradingInterfaceReal:
         print("oo")
         
     def setExchangeFullDetails(self, id, key, secret, password=None):
-        verbose = True
+        verbose = False
         exchange = None
 
         print('Set exchange: ' + id)
