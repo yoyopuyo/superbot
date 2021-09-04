@@ -1,0 +1,69 @@
+{
+	"options" : {
+		"sendMail" : true,
+		"cancelBuyAfterMinutes": 60
+	},
+	"alerts" : {
+		"Buy" : {
+			"action" : "buy",
+			"orderType" : "limit",
+			"sendMail": true,
+			"strategyId": "Reversionator"
+		},
+		"Sell" : {
+			"action" : "sellAll",
+			"quantityPercent" : 100,
+			"orderType" : "limit",
+			"strategyId": "Reversionator"
+		},
+		"DefenseSellLot4" : {
+			"action": "executeAlert",
+			"executeAlert" : "Defense!",
+			"executeWhen": "AllBuyOrdersClosedOrCanceled",
+			"strategyId": "Reversionator"
+		},				
+		"Defense!": {
+			"action" : "sellBreakEven",
+			"quantityPercent": 100,
+			"strategyId": "Reversionator"
+		},		
+		"Panic!!!": {
+			"action" : "mail"
+		}
+	},
+	"KUCOIN" : {
+		"*/USDT" : {
+			"minBalanceForFirstPurchase": 100,
+			"amountFirstBuyPercentOfBalance": 5,
+			"amountMultiplier": [1, 1.1, 1.2, 1.3]
+		},		
+		"FOREST/USDT" : {
+			"alerts" : {
+				"Buy" : {
+					"orderType" : "market"
+				},
+				"Sell" : {
+					"orderType" : "market"
+				}
+			}
+		}
+	},
+	"BINANCE" : {
+		"*/BNB" : {
+			"amount" : 0.1
+		}
+	},
+	"users": [{
+		"id" : "1",
+		"email" : "your email so you can receive the trade emails",
+		"exchangesDef" : [
+			{
+				"id" : "kucoin",				
+				"key" : "blablabla",
+				"secret" : "blablabla",
+				"password" : "blablabla"
+			}
+		]			
+	}
+	]
+}
