@@ -38,11 +38,12 @@ def loadUsers():
             user.email = mail
             
             for exchangeId in config["exchanges"]:
-                key = os.getenv(str(i) + "-" + exchangeId + "-key")
-                if key is not None:
-                    secret = os.getenv(str(i) + "-" + exchangeId + "-secret")
-                    password = os.getenv(str(i) + "-" + exchangeId + "-password")
-                    user.addExchange(exchangeId, key, secret, password)
+                if user.hasExchange(exchangeId) == False:
+                    key = os.getenv(str(i) + "-" + exchangeId + "-key")
+                    if key is not None:
+                        secret = os.getenv(str(i) + "-" + exchangeId + "-secret")
+                        password = os.getenv(str(i) + "-" + exchangeId + "-password")
+                        user.addExchange(exchangeId, key, secret, password)
                     
             user.print()
             users.append(user)
