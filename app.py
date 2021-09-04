@@ -475,7 +475,7 @@ def update():
     while True:
         if processingAlert == False:
             for user in users:
-                print("- update user " + user.emai)
+                print("- update user " + user.email)
                 updateOrdersStatus(user)
         time.sleep(60 * 3)
 
@@ -510,7 +510,9 @@ app = Flask(__name__)
 
 loadConfig()
 loadOrdersData()
+print("load users")
 loadUsers()
+print("load users done")
 for user in users:
     updateOrdersStatus(user)
 
@@ -562,7 +564,7 @@ def webhook():
         
         processingAlert = True
         for user in users:
-            print("- user " + user.emai)
+            print("- user " + user.email)
             sendOrder(user, d)
         processingAlert = False
         
