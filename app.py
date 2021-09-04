@@ -4,7 +4,6 @@ import os
 
 from fileutils import FileUtils
 from flask import Flask, request, abort, render_template
-import logging
 from mail import Mail
 from userSimple import UserSimple
 
@@ -12,22 +11,6 @@ ordersDataFileName = 'data/ordersData.txt'
 configFileName = 'data/configTradingViewBot.txt'
 
 processingAlert = False
-
-# set up logging to file - see previous section for more details
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(message)s',
-                    datefmt='%m-%d %H:%M',
-                    filename='tradingViewBotLogs.txt',
-                    filemode='a')
-# define a Handler which writes INFO messages or higher to the sys.stderr
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
-# set a format which is simpler for console use
-formatter = logging.Formatter('%(message)s')
-# tell the handler to use this format
-console.setFormatter(formatter)
-# add the handler to the root logger
-logging.getLogger('').addHandler(console)
 
 config = {}
 users = []
@@ -48,7 +31,7 @@ def loadUsers():
         mail = os.getenv(str(i) + "-mail")
         if mail is not None:
             print(mail)
-            user = UserSimple(logging)
+            user = UserSimple()
             user.id = i
             user.email = mail
             
@@ -63,7 +46,7 @@ def loadUsers():
             users.append(user)
         
     #for userData in config['users']:
-        #user = UserSimple(logging, userData)
+        #user = UserSimple(userData)
         #users.append(user)
 
 
@@ -398,7 +381,7 @@ def getOrdersInfo(exchange, ordersInfo):
     for order in ordersInfo['orders']:
         realOrder = exchange.getOrderById(order['orderId'], ordersInfo['symbol'])
         if realOrder == None:
-            logging.error("BuyOrder for " + ordersInfo['ticker'] + " with id " + str(order['orderId']) + " not found.")
+            print("BuyOrder for " + ordersInfo['ticker'] + " with id " + str(order['orderId']) + " not found.")
         else:
             coins += realOrder['filled']
             totalSpent += (realOrder['filled'] * realOrder['price'])
@@ -543,8 +526,8 @@ for user in users:
 # sendOrder(users[0], 'DefenseSellLot4, KUCOIN:CIRUSUSDT, 999999, 3')
 
 
-t = threading.Thread(target=update)
-t.start()
+#t = threading.Thread(target=update)
+#t.start()
 
 
 @app.route("/")

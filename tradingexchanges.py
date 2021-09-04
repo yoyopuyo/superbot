@@ -1,19 +1,18 @@
 from tradingInterfaceReal import TradingInterfaceReal
 
 class TradingExchanges:
-	def __init__(self, logging):
-		self.logging = logging
+	def __init__(self):
 		self.exchanges = {}
 
 	def createExchange(self, id):
-		tradingInterface = TradingInterfaceReal(self.logging)
+		tradingInterface = TradingInterfaceReal()
 		tradingInterface.setExchange(id)
 		tradingInterface.getTickers()
 		self.exchanges[id] = tradingInterface
 		return tradingInterface
 
 	def createExchangeFullDetails(self, id, key, secret, password):
-		tradingInterface = TradingInterfaceReal(self.logging)
+		tradingInterface = TradingInterfaceReal()
 		tradingInterface.setExchangeFullDetails(id, key, secret, password)
 		tradingInterface.getTickers()
 		self.exchanges[id] = tradingInterface

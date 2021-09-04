@@ -14,10 +14,9 @@ from ccxt import ExchangeError, NotSupported, ExchangeNotAvailable, RequestTimeo
 class TradingInterfaceReal:
     errorNoFund = 'ErrorNoFund'
 
-    def __init__(self, logging):
+    def __init__(self):
         self.testing = False
         self.id = ""
-        self.logging = logging
         self.exchange = None
         self.cachedOrderBook = {}
         self.cachedTickers = None
@@ -52,7 +51,7 @@ class TradingInterfaceReal:
             self.cachedBalances = balances
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error getBalance: " + str(e))
+            print("Error getBalance: " + str(e))
 
         return balances
 
@@ -97,13 +96,13 @@ class TradingInterfaceReal:
             #self.exchange.private_post_position_leverage({"symbol": symbol, "leverage": str(leverage)})
         #except:
             #e = sys.exc_info()[0]
-            #self.logging.info("Error setLeverage: " + str(e))
+            #print("Error setLeverage: " + str(e))
 
         #print(result)
         #return result
 
     def createOrder(self, symbol, type, side, amount, price, params):
-        self.logging.info("createOrder: " + symbol + " type:" + type + " side " + side + " amount " + str(amount) + " price: " + str(price))
+        print("createOrder: " + symbol + " type:" + type + " side " + side + " amount " + str(amount) + " price: " + str(price))
 
         result = None
 
@@ -111,12 +110,12 @@ class TradingInterfaceReal:
             result = self.exchange.create_order(symbol, type, side, amount, price, params)
         except ExchangeError as err:
             e = sys.exc_info()[0]
-            self.logging.info("Error createOrder: " + str(err))
+            print("Error createOrder: " + str(err))
             if 'InsufficientFunds' in str(e):
                 return TradingInterfaceReal.errorNoFund
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error createOrder: " + str(e))
+            print("Error createOrder: " + str(e))
 
         print(result)
         return result
@@ -154,7 +153,7 @@ class TradingInterfaceReal:
         if symbol in self.leverage:
             amountToBuy *= self.leverage[symbol];
 
-        self.logging.info("buyLimit: %s, amountToBuy: %.6f, price: %.8f" % (symbol, amountToBuy, price))
+        print("buyLimit: %s, amountToBuy: %.6f, price: %.8f" % (symbol, amountToBuy, price))
 
         try:
             result = self.exchange.create_limit_buy_order(symbol, amountToBuy, price)
@@ -168,13 +167,13 @@ class TradingInterfaceReal:
                 return TradingInterfaceReal.errorNoFund
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error buyLimit: " + str(e))
+            print("Error buyLimit: " + str(e))
 
             print(result)
 
         if result != None and 'info' in result and 'ExecutionReport' in result['info']:
             if result['info']['ExecutionReport']['execReportType'] == 'rejected':
-                self.logging.info('Order rejected: ' + result['info']['ExecutionReport']['orderRejectReason'])
+                print('Order rejected: ' + result['info']['ExecutionReport']['orderRejectReason'])
                 return None
 
         return result
@@ -189,7 +188,7 @@ class TradingInterfaceReal:
 
     def sellLimit(self, symbol, amount, price):
         result = None
-        self.logging.info("sellLimit: " + symbol + " amount:" + str(amount) + " price: " + str(price))
+        print("sellLimit: " + symbol + " amount:" + str(amount) + " price: " + str(price))
 
         try:
             result = self.exchange.create_limit_sell_order(symbol, amount, price)
@@ -199,7 +198,7 @@ class TradingInterfaceReal:
                 return TradingInterfaceReal.errorNoFund
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error sellLimit: " + str(e))
+            print("Error sellLimit: " + str(e))
 
         return result
 
@@ -208,7 +207,7 @@ class TradingInterfaceReal:
             ticker = self.exchange.fetch_ticker(symbol)
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error getTicker: " + str(e))
+            print("Error getTicker: " + str(e))
             return None
 
         return ticker
@@ -220,7 +219,7 @@ class TradingInterfaceReal:
             self.cachedTickers = tickers
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error getTickers: " + str(e))
+            print("Error getTickers: " + str(e))
             return None
 
         return tickers
@@ -232,7 +231,7 @@ class TradingInterfaceReal:
         verbose = False
         exchange = None
 
-        self.logging.info('Set exchange: ' + id)
+        print('Set exchange: ' + id)
         self.id = id
 
         if id == "poloniex":
@@ -264,7 +263,7 @@ class TradingInterfaceReal:
 
     # side is 'buy' or 'sell'
     def cancelOrdersForSymbol(self, symbol=None, side='both'):
-        self.logging.info("cancelOrdersForSymbol " + str(symbol))
+        print("cancelOrdersForSymbol " + str(symbol))
         try:
             orders = self.exchange.fetch_open_orders(symbol)
             for order in orders:
@@ -272,13 +271,13 @@ class TradingInterfaceReal:
                     self.cancelOrder(order['id'])
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error: " + str(e))
+            print("Error: " + str(e))
             return False
 
         return True
 
     def cancelOrder(self, orderId):
-        self.logging.info("Cancel order " + str(orderId))
+        print("Cancel order " + str(orderId))
         try:
             self.exchange.cancel_order(orderId)
         except (ExchangeNotAvailable, RequestTimeout) as err:
@@ -286,7 +285,7 @@ class TradingInterfaceReal:
             return self.cancelOrder(orderId)
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error: " + str(e))
+            print("Error: " + str(e))
             return False
 
         return True
@@ -301,7 +300,7 @@ class TradingInterfaceReal:
             print("ExchangeError: " + str(err))
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error: " + str(e))
+            print("Error: " + str(e))
 
         return orders
 
@@ -319,7 +318,7 @@ class TradingInterfaceReal:
             print("TimeoutError: " + str(err))
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error: " + str(e))
+            print("Error: " + str(e))
 
         return order
 
@@ -337,7 +336,7 @@ class TradingInterfaceReal:
             print("TimeoutError: " + str(err))
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error: " + str(e))
+            print("Error: " + str(e))
 
         return order
 
@@ -360,7 +359,7 @@ class TradingInterfaceReal:
             print("ExchangeError: " + str(err))
         except:
             e = sys.exc_info()[0]
-            self.logging.info("Error: " + str(e))
+            print("Error: " + str(e))
 
         self.cachedOrderBook[symbol] = orderBook
         return orderBook
@@ -372,6 +371,6 @@ class TradingInterfaceReal:
                 history = self.exchange.fetch_ohlcv(symbol, timeFrame)
             except:
                 e = sys.exc_info()[0]
-                self.logging.info("Error: " + str(e))
+                print("Error: " + str(e))
 
         return history

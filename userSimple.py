@@ -3,9 +3,8 @@ from typing import List
 from tradingexchanges import TradingExchanges
 
 class UserSimple:
-    def __init__(self, logging, userData = None):
-        self.logging = logging
-        self.tradingExchanges = TradingExchanges(logging)
+    def __init__(self, userData = None):
+        self.tradingExchanges = TradingExchanges()
 
         if userData is not None:
             self.id = userData['id']
