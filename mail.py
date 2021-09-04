@@ -11,8 +11,8 @@ class Mail:
 		if user != None:
 			to = user.email
 
-		uid = "gmail email"
-		pwd = "gmail password"
+		uid = "yoyopuyopuyo@gmail.com"
+		pwd = "+3m9NGhDN.7jtF5d"
 		mail_server = 'smtp.gmail.com'
 		message = "From : " + uid + "To : " + to + "Subject: Trading\r\n" + content
 		MESSAGE_FORMAT = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s"

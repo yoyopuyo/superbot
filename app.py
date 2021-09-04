@@ -1,6 +1,6 @@
 import time
 import threading
-from csv import excel_tab
+import os
 
 from fileutils import FileUtils
 from flask import Flask, request, abort, render_template
@@ -47,26 +47,41 @@ def loadConfig():
 
 
 def loadUsers():
-    for userData in config['users']:
-        user = UserSimple(logging, userData)
-        users.append(user)
+    for i in range(1, 3):
+        mail = os.getenv(str(i) + "-mail")
+        if mail is not None:
+            print(mail)
+            user = UserSimple(logging)
+            user.id = i
+            user.email = mail
+            
+            for exchangeId in config["exchanges"]:
+                key = os.getenv(str(i) + "-" + exchangeId + "-key")
+                if key is not None:
+                    secret = os.getenv(str(i) + "-" + exchangeId + "-secret")
+                    password = os.getenv(str(i) + "-" + exchangeId + "-password")
+                    user.addExchange(exchangeId, key, secret, password)
+                    
+            user.print()
+            users.append(user)
+        
+    #for userData in config['users']:
+        #user = UserSimple(logging, userData)
+        #users.append(user)
 
 
 def loadOrdersData():
     global ordersData
     ordersData = FileUtils.loadJsonFromFile(ordersDataFileName)
 
-
 def saveOrdersData():
     FileUtils.saveJsonToFile(ordersDataFileName, ordersData)
-
 
 def getAlertConfig(alertId):
     if alertId in config['alerts']:
         return config['alerts'][alertId]
 
     return {}
-
 
 def getAlertValue(exchangeId, symbol, alertId, itemId, default):
     cfg = getConfig(exchangeId, symbol)
@@ -86,37 +101,29 @@ def getAlertValue(exchangeId, symbol, alertId, itemId, default):
 
     return default
 
-
 def getOrderType(exchangeId, symbol, alertId):
     return getAlertValue(exchangeId, symbol, alertId, "orderType", "limit")
-
 
 def getStrategyId(exchangeId, symbol, alertId):
     return getAlertValue(exchangeId, symbol, alertId, "strategyId", "")
 
-
 def getQuantityPercent(exchangeId, symbol, alertId):
     return getAlertValue(exchangeId, symbol, alertId, "quantityPercent", 100)
-
 
 def getKeepFreeCoins(exchangeId, symbol, alertId):
     return getAlertValue(exchangeId, symbol, alertId, "keepFreeCoins", False)
 
-
 def getSendMail(exchangeId, symbol, alertId):
     return getAlertValue(exchangeId, symbol, alertId, "sendMail", True)
 
-
 def getActionFromAlertType(exchangeId, symbol, alertId):
     return getAlertValue(exchangeId, symbol, alertId, "action", None)
-
 
 def getConfig(exchangeId, symbol):
     if symbol in config[exchangeId]:
         return config[exchangeId][symbol]
 
     return {}
-
 
 def getConfigValue(exchangeId, symbol, value, default):
     if symbol in config[exchangeId] and value in config[exchangeId][symbol]:
@@ -129,7 +136,6 @@ def getConfigValue(exchangeId, symbol, value, default):
             return config[exchangeId][wildcard][value]
 
     return 0
-
 
 def getConfigAmountToBuy(user, exchangeId, symbol, numBuyOrders, ordersInfo):
     amountToBuy = 0
@@ -159,10 +165,8 @@ def getConfigAmountToBuy(user, exchangeId, symbol, numBuyOrders, ordersInfo):
 
     return amountToBuy
 
-
 def getCachedBalance(user, exchangeId, symbol, type='free'):
     return user.getExchange(exchangeId).getCachedBalanceForCoin(getSymbolRightPart(symbol), type)
-
 
 def sendOrder(user, data):
     print(data)
@@ -556,6 +560,7 @@ def webhook():
         # data = parse_webhook(request.get_data(as_text=True))
         # print(data)
         d = request.get_data(as_text=True)
+        Mail.sendMail("ueuoeueo", d, "ooochris@hotmail.com")
         print(d)
         print(d)
         exit(0)
