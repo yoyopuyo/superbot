@@ -14,6 +14,7 @@
 		"Sell" : {
 			"action" : "sellAll",
 			"quantityPercent" : 100,
+			"keepFreeCoins" : false,
 			"orderType" : "limit",
 			"strategyId": "Reversionator"
 		},
@@ -34,10 +35,16 @@
 	},
 	"KUCOIN" : {
 		"*/USDT" : {
-			"minBalanceForFirstPurchase": 100,
+			"minBalanceForFirstPurchaseFreePercentOfTotal": 30,
 			"amountFirstBuyPercentOfBalance": 5,
 			"amountMultiplier": [1, 1.1, 1.2, 1.3]
 		},		
+		"HTR/USDT" : {
+			"amountFirstBuyPercentOfBalance": 7
+		},
+		"VRA/USDT" : {
+			"amountFirstBuyPercentOfBalance": 7
+		},
 		"FOREST/USDT" : {
 			"alerts" : {
 				"Buy" : {
@@ -47,11 +54,31 @@
 					"orderType" : "market"
 				}
 			}
-		}
+		}		
 	},
 	"BINANCE" : {
 		"*/BNB" : {
 			"amount" : 0.1
 		}
+	},
+	"BINANCEUSDM" : {
+		"*/USDT" : {
+			"amount" : 1
+		}
+	},
+	"bittrex" : {
+		"*/BTC" : {
+			"amount" : 0.002
+		},
+		"KDA/BTC" : {
+			"alerts" : {
+				"Buy" : {
+					"orderType" : "market"
+				},
+				"Sell" : {
+					"orderType" : "market"
+				}
+			}
+		}		
 	}
 }
