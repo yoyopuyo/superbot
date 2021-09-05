@@ -60,15 +60,22 @@ def loadUsers():
 
 def loadOrdersData():
     global ordersData
+    global saveToS3
+    print("load orders " + str(saveToS3))
     if saveToS3:
-        s3.saveJsonToFile('orders.json', ordersData)
+        ordersData = s3.loadJsonFromFile('orders.json')
+        print("orders " + ordersData)
     else:
         ordersData = FileUtils.loadJsonFromFile(ordersDataFileName)
 
 def saveOrdersData():
     global ordersData
+    global saveToS3
+    print("save orders " + str(saveToS3))
+    print("orders " + ordersData)
+    
     if saveToS3:
-        ordersData = s3.loadJsonFromFile('orders.json')
+        s3.saveJsonToFile('orders.json', ordersData)
     else:
         FileUtils.saveJsonToFile(ordersDataFileName, ordersData)
 
