@@ -17,7 +17,9 @@ config = {}
 users = []
 ordersData = []
 saveToS3 = False
-if os.getenv('save-to-s3', None) == 1:
+print("oee " +str(os.getenv('save-to-s3', None)))
+if os.getenv('save-to-s3', None) == "1":
+    print("nnn")
     saveToS3 = True
     s3 = S3FileUtils()    
     
@@ -523,7 +525,6 @@ app = Flask(__name__)
 loadConfig()
 loadOrdersData()
 loadUsers()
-Mail.sendMail("eoeue", "eueu", "ooochris@hotmail.com")
 for user in users:
     updateOrdersStatus(user)
 
