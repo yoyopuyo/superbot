@@ -65,7 +65,6 @@ def loadOrdersData():
     print("load orders " + str(saveToS3))
     if saveToS3:
         ordersData = s3.loadJsonFromFile('orders.json')
-        print("orders " + ordersData)
     else:
         ordersData = FileUtils.loadJsonFromFile(ordersDataFileName)
 
