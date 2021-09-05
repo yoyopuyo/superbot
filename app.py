@@ -17,9 +17,8 @@ config = {}
 users = []
 ordersData = []
 saveToS3 = False
-print("oee " +str(os.getenv('save-to-s3', None)))
 if os.getenv('save-to-s3', None) == "1":
-    print("nnn")
+    print("Load from s3")
     saveToS3 = True
     s3 = S3FileUtils()    
     
@@ -41,7 +40,7 @@ def loadUsers():
         if mail is not None:
             print(mail)
             user = UserSimple()
-            user.id = i
+            user.id = str(i)
             user.email = mail
             
             for exchangeId in config["exchanges"]:
