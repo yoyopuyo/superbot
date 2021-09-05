@@ -2,6 +2,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText  # Added
 from email.mime.image import MIMEImage
+import os
 
 class Mail:
 	#def __init__(self, logging):
@@ -11,8 +12,8 @@ class Mail:
 		if user != None:
 			to = user.email
 
-		uid = "yoyopuyopuyo@gmail.com"
-		pwd = "+3m9NGhDN.7jtF5d"
+		uid = os.getenv("sendmail")
+		pwd = os.getenv("sendmail-password")
 		mail_server = 'smtp.gmail.com'
 		message = "From : " + uid + "To : " + to + "Subject: Trading\r\n" + content
 		MESSAGE_FORMAT = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s"

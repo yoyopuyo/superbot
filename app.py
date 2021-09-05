@@ -6,6 +6,7 @@ from fileutils import FileUtils
 from flask import Flask, request, abort, render_template
 from mail import Mail
 from userSimple import UserSimple
+from s3FileUtils import S3FileUtils
 
 ordersDataFileName = 'data/ordersData.txt'
 configFileName = 'data/configTradingViewBot.txt'
@@ -15,7 +16,11 @@ processingAlert = False
 config = {}
 users = []
 ordersData = []
-
+saveToS3 = False
+if os.getenv('save-to-s3', None) == 1:
+    saveToS3 = True
+    s3 = S3FileUtils()    
+    
 def getSymbolRightPart(symbol):
     if '/' in symbol:
         return symbol.split('/')[1]
@@ -55,10 +60,17 @@ def loadUsers():
 
 def loadOrdersData():
     global ordersData
-    ordersData = FileUtils.loadJsonFromFile(ordersDataFileName)
+    if saveToS3:
+        s3.saveJsonToFile('orders.json', ordersData)
+    else:
+        ordersData = FileUtils.loadJsonFromFile(ordersDataFileName)
 
 def saveOrdersData():
-    FileUtils.saveJsonToFile(ordersDataFileName, ordersData)
+    global ordersData
+    if saveToS3:
+        ordersData = s3.loadJsonFromFile('orders.json')
+    else:
+        FileUtils.saveJsonToFile(ordersDataFileName, ordersData)
 
 def getAlertConfig(alertId):
     if alertId in config['alerts']:
@@ -423,6 +435,7 @@ def updateOrdersStatus(user):
         return
 
     a = ordersData[user.id]
+    changed = False
     for exchangeId in ordersData[user.id]:
         ordersForExchange = ordersData[user.id][exchangeId]
         for ordersInfo in ordersForExchange:
@@ -439,15 +452,20 @@ def updateOrdersStatus(user):
                     realOrder = user.getExchange(exchangeId).getOrderById(order['orderId'], ordersInfo['symbol'])
                     if realOrder == None:
                         order['status'] = 'notFound'
+                        changed = True
                     else:
+                        if order['status'] is not realOrder['status']:
+                            changed = True
                         order['status'] = realOrder['status']
 
                         if order['time'] >= cancelBuyAfterMinutes:
                             print("Order time elapsed: " + ordersInfo['ticker'])
                             user.getExchange(exchangeId).cancelOrder(order['orderId'])
                             order['status'] = 'canceled'
+                            changed = True
 
-                saveOrdersData()
+                if changed:
+                    saveOrdersData()
 
             tryLaunchAlert(user, exchangeId, ordersInfo['ticker'], ordersInfo['timeFrame'], ordersInfo['strategy'])
 
@@ -497,9 +515,8 @@ app = Flask(__name__)
 
 loadConfig()
 loadOrdersData()
-print("load users")
 loadUsers()
-print("load users done")
+Mail.sendMail("eoeue", "eueu", "ooochris@hotmail.com")
 for user in users:
     updateOrdersStatus(user)
 
@@ -528,7 +545,6 @@ for user in users:
 # sendOrder(users[0], 'DefenseSellLot4, CAPITALCOM:DE30, 152.4,1')
 # sendOrder(users[0], 'Buy, KUCOIN:HAIUSDT, 999999')
 # sendOrder(users[0], 'DefenseSellLot4, KUCOIN:CIRUSUSDT, 999999, 3')
-
 
 t = threading.Thread(target=update)
 t.start()
