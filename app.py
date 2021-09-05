@@ -72,7 +72,6 @@ def saveOrdersData():
     global ordersData
     global saveToS3
     print("save orders " + str(saveToS3))
-    print("orders " + ordersData)
     
     if saveToS3:
         s3.saveJsonToFile('orders.json', ordersData)
