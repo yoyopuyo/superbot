@@ -1,5 +1,5 @@
 {
-	"exchanges": ["kucoin"],
+	"exchanges": ["kucoin", "bittrex"],
 	"options" : {
 		"sendMail" : true,
 		"cancelBuyAfterMinutes": 60
@@ -69,16 +69,6 @@
 	"bittrex" : {
 		"*/BTC" : {
 			"amount" : 0.002
-		},
-		"KDA/BTC" : {
-			"alerts" : {
-				"Buy" : {
-					"orderType" : "market"
-				},
-				"Sell" : {
-					"orderType" : "market"
-				}
-			}
-		}		
+		}
 	}
 }
