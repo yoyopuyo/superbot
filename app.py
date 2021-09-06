@@ -519,6 +519,9 @@ def getNumberSystemsForStrategy(user, exchangeId, strategyId):
 # Create Flask object called app.
 app = Flask(__name__)
 
+os.environ['http_proxy'] = os.environ.get('FIXIE_URL', '')
+os.environ['https_proxy'] = os.environ.get('FIXIE_URL', '')
+
 loadConfig()
 loadOrdersData()
 loadUsers()
