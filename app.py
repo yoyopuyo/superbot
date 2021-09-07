@@ -266,6 +266,7 @@ def sendOrder(user, data):
         numBuyOrders = getNumberBuyOrders(user, exchangeId, tickerId, timeFrame, strategyId)
 
         minBalanceForFirstPurchaseFreePercentOfTotal = getConfigValue(exchangeId, symbol, "minBalanceForFirstPurchaseFreePercentOfTotal", 0)
+        print("minBalanceForFirstPurchaseFreePercentOfTotal " + str(minBalanceForFirstPurchaseFreePercentOfTotal))
         freeBalance = getCachedBalance(user, exchangeId, symbol)
         total = getCachedBalance(user, exchangeId, symbol, 'total')
         print("Free Balance " + str(freeBalance) + " total Balance " + str(total) + " minBalanceForFirstPurchaseFreePercentOfTotal " + str(minBalanceForFirstPurchaseFreePercentOfTotal))
@@ -274,6 +275,7 @@ def sendOrder(user, data):
             return
 
         minBalanceForFirstPurchase = getConfigValue(exchangeId, symbol, "minBalanceForFirstPurchase", 0)
+        print("minBalanceForFirstPurchase " + str(minBalanceForFirstPurchase))
         freeBalance = getCachedBalance(user, exchangeId, symbol)
         if minBalanceForFirstPurchase != 0 and freeBalance < minBalanceForFirstPurchase:
             print("Not enough funds minBalanceForFirstPurchase")
