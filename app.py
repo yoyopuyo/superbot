@@ -265,21 +265,22 @@ def sendOrder(user, data):
 
         numBuyOrders = getNumberBuyOrders(user, exchangeId, tickerId, timeFrame, strategyId)
 
-        minBalanceForFirstPurchaseFreePercentOfTotal = getConfigValue(exchangeId, symbol, "minBalanceForFirstPurchaseFreePercentOfTotal", 0)
-        print("minBalanceForFirstPurchaseFreePercentOfTotal " + str(minBalanceForFirstPurchaseFreePercentOfTotal))
-        freeBalance = getCachedBalance(user, exchangeId, symbol)
-        total = getCachedBalance(user, exchangeId, symbol, 'total')
-        print("Free Balance " + str(freeBalance) + " total Balance " + str(total) + " minBalanceForFirstPurchaseFreePercentOfTotal " + str(minBalanceForFirstPurchaseFreePercentOfTotal))
-        if minBalanceForFirstPurchaseFreePercentOfTotal != 0 and (1 - (total - freeBalance) / total) * 100 < minBalanceForFirstPurchaseFreePercentOfTotal:
-            print("Not enough funds minBalanceForFirstPurchaseFreePercentOfTotal")
-            return
-
-        minBalanceForFirstPurchase = getConfigValue(exchangeId, symbol, "minBalanceForFirstPurchase", 0)
-        print("minBalanceForFirstPurchase " + str(minBalanceForFirstPurchase))
-        freeBalance = getCachedBalance(user, exchangeId, symbol)
-        if minBalanceForFirstPurchase != 0 and freeBalance < minBalanceForFirstPurchase:
-            print("Not enough funds minBalanceForFirstPurchase")
-            return
+        if numBuyOrders == 0:
+            minBalanceForFirstPurchaseFreePercentOfTotal = getConfigValue(exchangeId, symbol, "minBalanceForFirstPurchaseFreePercentOfTotal", 0)
+            print("minBalanceForFirstPurchaseFreePercentOfTotal " + str(minBalanceForFirstPurchaseFreePercentOfTotal))
+            freeBalance = getCachedBalance(user, exchangeId, symbol)
+            total = getCachedBalance(user, exchangeId, symbol, 'total')
+            print("Free Balance " + str(freeBalance) + " total Balance " + str(total) + " minBalanceForFirstPurchaseFreePercentOfTotal " + str(minBalanceForFirstPurchaseFreePercentOfTotal))
+            if minBalanceForFirstPurchaseFreePercentOfTotal != 0 and (1 - (total - freeBalance) / total) * 100 < minBalanceForFirstPurchaseFreePercentOfTotal:
+                print("Not enough funds minBalanceForFirstPurchaseFreePercentOfTotal")
+                return
+    
+            minBalanceForFirstPurchase = getConfigValue(exchangeId, symbol, "minBalanceForFirstPurchase", 0)
+            print("minBalanceForFirstPurchase " + str(minBalanceForFirstPurchase))
+            freeBalance = getCachedBalance(user, exchangeId, symbol)
+            if minBalanceForFirstPurchase != 0 and freeBalance < minBalanceForFirstPurchase:
+                print("Not enough funds minBalanceForFirstPurchase")
+                return
 
         ordersInfo = getOrderData(user, exchangeId, tickerId, timeFrame, strategyId)
         amountToBuy = getConfigAmountToBuy(user, exchangeId, symbol, numBuyOrders, ordersInfo)
