@@ -35,7 +35,7 @@
 	},
 	"KUCOIN" : {
 		"*/USDT" : {
-			"minBalanceForFirstPurchaseFreePercentOfTotal": 30,
+			"minBalanceForFirstPurchase": 300,
 			"amountFirstBuyPercentOfBalance": 5,
 			"amountMultiplier": [1, 1.1, 1.2, 1.3]
 		},		
