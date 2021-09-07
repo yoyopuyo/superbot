@@ -11,7 +11,6 @@ class S3FileUtils:
         obj = self.s3.put_object(Body=str(json.dumps(data)), Bucket=os.getenv('s3-bucket'),Key=fileName)
 
     def loadJsonFromFile(self, fileName):
-        data = {}
         result = self.s3.get_object(Bucket=os.getenv('s3-bucket'), Key=fileName)
         str = result["Body"].read().decode()
         return json.loads(str)

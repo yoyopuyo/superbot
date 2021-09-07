@@ -1,5 +1,5 @@
 {
-	"exchanges": ["kucoin", "bittrex"],
+	"exchanges": ["kucoin", "bittrex", "binance", "binanceusdm"],
 	"options" : {
 		"sendMail" : true,
 		"cancelBuyAfterMinutes": 60

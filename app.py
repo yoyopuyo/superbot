@@ -9,18 +9,29 @@ from userSimple import UserSimple
 from s3FileUtils import S3FileUtils
 
 ordersDataFileName = 'data/ordersData.txt'
-configFileName = 'data/configTradingViewBot.txt'
+configFileName = 'data/config.txt'
 
 processingAlert = False
 
 config = {}
 users = []
 ordersData = []
+
 saveToS3 = False
+initS3 = False
 if os.getenv('save-to-s3', None) == "1":
-    print("Load from s3")
+    print("Load orders from s3")
     saveToS3 = True
-    s3 = S3FileUtils()    
+    initS3 = True
+
+configFromS3 = False
+if os.getenv('config-from-s3', None) == "1":
+    print("Load config from s3")
+    configFromS3 = True
+    initS3
+
+if initS3:
+    s3 = S3FileUtils()
     
 def getSymbolRightPart(symbol):
     if '/' in symbol:
@@ -30,7 +41,12 @@ def getSymbolRightPart(symbol):
 
 def loadConfig():
     global config
-    config = FileUtils.loadJsonFromFile(configFileName)
+    global configFromS3
+
+    if saveToS3:
+        config = s3.loadJsonFromFile('config.txt')
+    else:    
+        config = FileUtils.loadJsonFromFile(configFileName)
 
 def loadUsers():
     global users
@@ -44,6 +60,7 @@ def loadUsers():
             user.email = mail
             
             for exchangeId in config["exchanges"]:
+                print("Try to create exchange " + exchangeId)
                 if user.hasExchange(exchangeId) == False:
                     key = os.getenv(str(i) + "-" + exchangeId + "-key")
                     if key is not None:
