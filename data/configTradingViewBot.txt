@@ -66,7 +66,7 @@
 			"amount" : 1
 		}
 	},
-	"bittrex" : {
+	"BITTREX" : {
 		"*/BTC" : {
 			"amount" : 0.002
 		}
