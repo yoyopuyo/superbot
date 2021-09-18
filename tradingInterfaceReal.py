@@ -51,7 +51,7 @@ class TradingInterfaceReal:
             self.cachedBalances = balances
         except:
             e = sys.exc_info()[0]
-            print("Error getBalance: " + str(e))
+            print("Error getBalance: " + self.id + " " + str(e))
 
         return balances
 
