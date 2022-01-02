@@ -1,0 +1,33 @@
+version: "3.3"
+
+networks:
+  default:
+
+services:
+  tvb:
+    container_name: tvb
+    build: .
+    restart: always
+    volumes: 
+      - .:/app
+    ports:
+      - 5000:5000
+    networks:
+      - default
+    environment:
+      - PYTHONUNBUFFERED=1
+      - sendmail=yoyopuyopuyo@gmail.com
+      - sendmail-password=+3m9NGhDN.7jtF5d
+
+  ngrok:
+    image: wernight/ngrok:latest
+    ports:
+      - 4040:4040
+    environment:
+      NGROK_PROTOCOL: http
+      NGROK_PORT: tvb:5000
+      NGROK_AUTH: 1wdLq2J4BcKRJiHYXLwKpTSMdN7_2swkV7vwikpW2XMbMJFie
+    depends_on:
+      - tvb
+    networks:
+      - default

@@ -1,4 +1,7 @@
 flask
-ccxt
+cryptography
 gunicorn
 boto3
+flask-ngrok
+gspread
+retry

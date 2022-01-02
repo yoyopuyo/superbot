@@ -13,6 +13,8 @@ class Mail:
 			to = user.email
 
 		uid = os.getenv("sendmail")
+		if uid == None:
+			return 
 		pwd = os.getenv("sendmail-password")
 		mail_server = 'smtp.gmail.com'
 		message = "From : " + uid + "To : " + to + "Subject: Trading\r\n" + content
